@@ -124,5 +124,5 @@ if uploaded_file is not None:
             )
 
             #Question
-            result = rag_chain.invoke("What is the main contribution of this paper?")
+            result = rag_chain.invoke(question)
             st.write(result)
