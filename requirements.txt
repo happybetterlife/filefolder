@@ -1,7 +1,13 @@
 streamlit
 langchain
 langchain-community
-langchain-core
-langchain-ollama
+langchain-openai
+langchain-chroma
+pypdf
+cvs
+text
 python-dotenv
 pysqlite3-binary
+chromadb
+tiktoken
+openai
