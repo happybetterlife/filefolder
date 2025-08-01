@@ -3,6 +3,7 @@ langchain
 langchain-openai
 langchain-community  
 langchain-chroma
+langchain-text-splitters
 pypdf
 python-dotenv
 pysqlite3-binary
