@@ -71,25 +71,25 @@ if uploaded_file is not None:
     st.write(f"파일 '{uploaded_file.name}'이(가) 성공적으로 업로드되었습니다.")
     st.write(f"문서의 페이지 수: {len(pages)}")
 
-#Splitter
-text_splitter = RecursiveCharacterTextSplitter(
-    # Set a reallysmall chunk size, just to show.
-    chunk_size=300, 
-    chunk_overlap=20,
-    length_function=len,
-    is_separator_regex=False,
-)
-texts = text_splitter.split_documents(pages)
+    #Splitter
+    text_splitter = RecursiveCharacterTextSplitter(
+        # Set a reallysmall chunk size, just to show.
+        chunk_size=300, 
+        chunk_overlap=20,
+        length_function=len,
+        is_separator_regex=False,
+    )
+    texts = text_splitter.split_documents(pages)
 
 
-#Embeddings
-embeddings_model = OpenAIEmbeddings(
-    model="text-embedding-3-large",
-    # With the 'text-embedding-3-large',
-    # of models, you can specify the size
-    # of the embeddings you want to return.
-    # dimensions=1024
-)
+    #Embeddings
+    embeddings_model = OpenAIEmbeddings(
+        model="text-embedding-3-large",
+        # With the 'text-embedding-3-large',
+        # of models, you can specify the size
+        # of the embeddings you want to return.
+        # dimensions=1024
+    )
 
 import chromadb
 chromadb.api.client.SharedSystemClient.clear_system_cache()
