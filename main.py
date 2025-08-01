@@ -82,22 +82,20 @@ if uploaded_file is not None:
     texts = text_splitter.split_documents(pages)
 
 
-    #Embeddings
-    embeddings_model = OpenAIEmbeddings(
-        model="text-embedding-3-large",
-        # With the 'text-embedding-3-large',
-        # of models, you can specify the size
-        # of the embeddings you want to return.
-        # dimensions=1024
-    )
+#Embeddings
+embeddings_model = OpenAIEmbeddings(
+    model="text-embedding-3-large",
+    # With the 'text-embedding-3-large',
+    # of models, you can specify the size
+    # of the embeddings you want to return.
+    # dimensions=1024
+)
 
 import chromadb
 chromadb.api.client.SharedSystemClient.clear_system_cache()
 
 #Chroma DB
-db = Chroma.from_documents(
-    texts,
-    embeddings_model)
+db = Chroma.from_documents(texts, embeddings_model)
 
 #User Input
 st.header("질문을 입력하세요")
