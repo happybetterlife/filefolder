@@ -82,47 +82,47 @@ if uploaded_file is not None:
     texts = text_splitter.split_documents(pages)
 
 
-#Embeddings
-embeddings_model = OpenAIEmbeddings(
-    model="text-embedding-3-large",
-    # With the 'text-embedding-3-large',
-    # of models, you can specify the size
-    # of the embeddings you want to return.
-    # dimensions=1024
-)
+    #Embeddings
+    embeddings_model = OpenAIEmbeddings(
+        model="text-embedding-3-large",
+        # With the 'text-embedding-3-large',
+        # of models, you can specify the size
+        # of the embeddings you want to return.
+        # dimensions=1024
+    )
 
-import chromadb
-chromadb.api.client.SharedSystemClient.clear_system_cache()
+    import chromadb
+    chromadb.api.client.SharedSystemClient.clear_system_cache()
 
-#Chroma DB
-db = Chroma.from_documents(texts, embeddings_model)
+    #Chroma DB
+    db = Chroma.from_documents(texts, embeddings_model)
 
-#User Input
-st.header("질문을 입력하세요")
-question = st.text_input("질문을 입력하세요", placeholder="예: 이 논문의 주요 기여는 무엇인가요?")
+    #User Input
+    st.header("질문을 입력하세요")
+    question = st.text_input("질문을 입력하세요", placeholder="예: 이 논문의 주요 기여는 무엇인가요?")
 
-if st.button("질문하기"):
-    with st.spinner("답변을 생성하는 중..."):
-        #Retriever
-        llm = ChatOpenAI(temperature=0)
-        retriever_from_llm = MultiQueryRetriever.from_llm(
-            retriever=db.as_retriever(), llm=llm
-        )
+    if st.button("질문하기"):
+        with st.spinner("답변을 생성하는 중..."):
+            #Retriever
+            llm = ChatOpenAI(temperature=0)
+            retriever_from_llm = MultiQueryRetriever.from_llm(
+                retriever=db.as_retriever(), llm=llm
+            )
 
-        #Prompt Template
-        prompt = hub.pull("rlm/rag-prompt")
+            #Prompt Template
+            prompt = hub.pull("rlm/rag-prompt")
 
-        #Generate
-        def format_docs(docs):
-            return "\n\n".join([doc.page_content for doc in docs])
-        rag_chain = (
-            {"context": retriever_from_llm | format_docs, 
-            "question": RunnablePassthrough()}
-            | prompt
-            | llm
-            | StrOutputParser()
-        )
+            #Generate
+            def format_docs(docs):
+                return "\n\n".join([doc.page_content for doc in docs])
+            rag_chain = (
+                {"context": retriever_from_llm | format_docs, 
+                "question": RunnablePassthrough()}
+                | prompt
+                | llm
+                | StrOutputParser()
+            )
 
-        #Question
-        result = rag_chain.invoke("What is the main contribution of this paper?")
-        st.write(result)
+            #Question
+            result = rag_chain.invoke("What is the main contribution of this paper?")
+            st.write(result)
